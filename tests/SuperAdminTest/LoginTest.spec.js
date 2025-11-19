@@ -8,11 +8,7 @@ test.describe('TS01 - Login', async () => {
     test('TC001 - Login with valid credentials', async ({page}) => {
         const loginpage = new LoginPage(page);
         await loginpage.LaunchUrl('https://dev-v2.yaantrac.com/');
-<<<<<<< HEAD
         await loginpage.enterTheCredentials('raaja', 'Raaja@12345');
-=======
-        await loginpage.enterTheCredentials('raaja', 'Raaja@123');
->>>>>>> 6a4323d98db8c0407252a66f21e87b969c8a91af
     })
 
     test('TC002 - Login with Invalid UserName', async ({page}) => {
