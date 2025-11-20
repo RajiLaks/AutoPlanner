@@ -254,8 +254,8 @@ class TourPage {
         await this.menuIcon.click({ force: true });
         await this.page.waitForTimeout(1000);
         await this.updateText.click({ force: true });
-        await this.togglebutton.click();
-        await this.tourName.click();
+        //await this.togglebutton.click();
+        await this.tourName.click();        
         await this.tourName.fill(TourName);
         await this.tourMode.click();
         await this.tourMode.fill(TourMode);
