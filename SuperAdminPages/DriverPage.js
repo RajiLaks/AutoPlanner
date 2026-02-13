@@ -51,6 +51,21 @@ class DriverPage
         this.ContactNumber = page.getByPlaceholder('Contact Number')        
         this.SuccessToast = page.locator('div.MuiAlert-message')
         this.DeletedToast = page.locator('div.MuiAlert-message')
+        this.FromTime = page.locator('input[placeholder="hh:mm aa"]').nth(0)
+        this.ToTime = page.locator('input[placeholder="hh:mm aa"]').nth(1)
+        this.FromClock = page.locator('button:has(svg[data-testid="ClockIcon"])').nth(0)
+        this.ToClock   = page.locator('button:has(svg[data-testid="ClockIcon"])').nth(1)
+        this.DriverShift = page.getByRole('checkbox', { name: 'Field Switch' })
+        this.DayCheckbox = {
+        Sunday: page.locator('label:has-text("Sunday") input[type="checkbox"]'),
+        Monday: page.locator('label:has-text("Monday") input[type="checkbox"]'),
+        Tuesday: page.locator('label:has-text("Tuesday") input[type="checkbox"]'),
+        Wednesday: page.locator('label:has-text("Wednesday") input[type="checkbox"]'),
+        Thursday: page.locator('label:has-text("Thursday") input[type="checkbox"]'),
+        Friday: page.locator('label:has-text("Friday") input[type="checkbox"]'),
+        Saturday: page.locator('label:has-text("Saturday") input[type="checkbox"]'),
+        }    
+
 
     }
 
@@ -572,6 +587,119 @@ class DriverPage
     const message = (await this.SuccessToast.textContent())?.trim();
     return message === 'Driver details deleted successfully';
     }
+
+    async EnterFromTime(time) 
+    {
+        await this.page.evaluate(() => {
+        const el = document.querySelector('input[placeholder="hh:mm aa"]')
+        if (el) el.scrollIntoView({ behavior: 'auto', block: 'center' })
+        })
+        await this.page.waitForTimeout(1000)
+        await this.FromTime.fill(time)
+        await this.page.waitForTimeout(1000)
+
+        const fromInput = this.page.locator('input[placeholder="hh:mm aa"]').first();
+
+        // Click and type slowly to trigger MUI events
+        await fromInput.click({ force: true });
+        await fromInput.pressSequentially(time, { delay: 100 });
+        await this.page.keyboard.press('Tab'); // to blur and trigger validation
+        await this.page.waitForTimeout(1000)
+    }
+
+    async EnterToTime(time) 
+    {
+        const toInput = this.page.locator('input[placeholder="hh:mm aa"]').nth(1);
+        await toInput.click({ force: true });
+        await toInput.pressSequentially(time, { delay: 100 });
+        await this.page.keyboard.press('Tab');
+        await this.page.waitForTimeout(2000);
+    }
+
+    async selectTime(clockLocator, timeString) 
+    {
+        const [hour, minute, period] = timeString.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i).slice(1);
+
+        // Scroll the field into view
+        await this.page.evaluate(() => {
+            const el = document.querySelector('input[placeholder="hh:mm aa"]');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        await this.page.waitForTimeout(800);
+
+        // Open the clock picker
+        await clockLocator.click();
+
+        const clockPopup = this.page.locator('.MuiMultiSectionDigitalClock-root');
+        await clockPopup.waitFor({ state: 'visible', timeout: 5000 });
+
+        // --- Select hour ---
+        const hourList = clockPopup.locator('ul[aria-label="Select hours"]');
+        await hourList.waitFor({ state: 'visible', timeout: 5000 });
+
+        // Wait until at least one hour <li> appears
+        await this.page.waitForFunction(() =>
+            document.querySelectorAll('ul[aria-label="Select hours"] li[role="option"]').length > 0
+        );
+
+        const hourOption = hourList.locator(`li[aria-label="${parseInt(hour)} hours"]`);
+        await hourOption.scrollIntoViewIfNeeded();
+        await hourOption.click({ force: true });
+
+        await this.page.waitForTimeout(600);
+
+        // --- Select minute ---
+        const minuteList = clockPopup.locator('ul[aria-label="Select minutes"]');
+        await minuteList.waitFor({ state: 'visible', timeout: 5000 });
+
+        await this.page.waitForFunction(() =>
+            document.querySelectorAll('ul[aria-label="Select minutes"] li[role="option"]').length > 0
+        );
+
+        const minuteOption = minuteList.locator(`li[aria-label="${parseInt(minute)} minutes"]`);
+        await minuteOption.scrollIntoViewIfNeeded();
+        await minuteOption.click({ force: true });
+
+        await this.page.waitForTimeout(600);
+
+        // --- Select AM/PM ---
+        const periodList = clockPopup.locator('ul[aria-label="Select meridiem"]');
+        await periodList.waitFor({ state: 'visible', timeout: 5000 });
+
+        const periodOption = periodList.locator(`li[aria-label="${period.toUpperCase()}"]`);
+        await periodOption.scrollIntoViewIfNeeded();
+        await periodOption.click({ force: true });
+
+        // Close picker
+        await this.page.keyboard.press('Escape');
+        await this.page.waitForTimeout(1000);
+    }
+
+    async ToggleDriverShift() 
+    {
+        await this.page.evaluate(() => {
+        const el = document.querySelector('input[name="fieldSwitch"]')
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        })
+        await this.page.waitForTimeout(1000)
+        await this.DriverShift.click()
+
+        await this.page.evaluate(() => {
+        // Scroll the main page (or scrollable container if available)
+        const scrollContainer = document.scrollingElement || document.documentElement;
+        scrollContainer.scrollBy({ top: 300, behavior: 'smooth' }); // increase 300 to 500 if needed
+        });
+        await this.page.waitForTimeout(2000);
+    }
+
+    async selectDay(dayName) 
+    {
+    const checkbox = this.DayCheckbox[dayName]
+    //await checkbox.waitFor({ state: 'visible' });
+    await checkbox.check({force: true})
+    }
+
 
 
 }   

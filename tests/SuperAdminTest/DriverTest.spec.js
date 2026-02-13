@@ -19,7 +19,7 @@ test.describe('TS03', async()=>{
 
     test.beforeAll('Reports Module', async({browser})=>{
         context = await browser.newContext({
-            //viewport: { width: 1200, height: 600 },
+            //viewport: { width: 1280, height: 720 },
             geolocation: {latitude: 12.939965304673995, longitude: 80.11990807936198},
             permissions: ['geolocation'],
     });
@@ -479,8 +479,7 @@ test("TC023 - Verify username field doesn't create duplicate values", async () =
 
 })
 
-test.only("TC024 - Verify driver is created when user enters valid inputs,verify success toaster message and delete the newly created driver", async () => {     
-    test.setTimeout(60000)
+test("TC024 - Verify driver is created when user enters valid inputs,verify success toaster message and delete the newly created driver", async () => {     
     const driverPage = new DriverPage(page)
     //Select the Management option in side navbar
     await driverPage.clickManagement()
@@ -511,5 +510,45 @@ test.only("TC024 - Verify driver is created when user enters valid inputs,verify
     expect(isdeleteVisible).toBeTruthy()
 
 })
+
+test("TC025 - Verify user can set driver availability time in Standard Shift using two methods", async () => {     
+
+    const driverPage = new DriverPage(page)
+    //Select the Management option in side navbar
+    await driverPage.clickManagement()
+
+    //click the Add Driver button to open the Add Driver box
+    await driverPage.OpenAddDriver()
+
+    //Entering time manually in standard shift
+    await driverPage.EnterFromTime('08:00 am' )
+    await driverPage.EnterToTime('07:30 pm' )
+
+    //Selecting time from the clock in standard shift
+    await driverPage.selectTime(driverPage.FromClock, "07:30 AM");
+    await driverPage.selectTime(driverPage.ToClock, "06:55 PM");
+    await page.waitForTimeout(1000)
+    await driverPage.CloseAddDriver()
+
+})
+
+test.only("TC026 - Verify user can set driver time without Standard shift", async () => {     
+
+    const driverPage = new DriverPage(page)
+    //Select the Management option in side navbar
+    await driverPage.clickManagement()
+
+    //click the Add Driver button to open the Add Driver box
+    await driverPage.OpenAddDriver()
+
+    //Turning off the Standard Shift toggle button
+    await driverPage.ToggleDriverShift()
+
+    await driverPage.selectDay("Monday");
+    await driverPage.selectDay("Wednesday");
+    await driverPage.selectDay("Friday");
+
+})
+
 
 })

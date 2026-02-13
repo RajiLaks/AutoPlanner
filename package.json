@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/RajiLaks/AutoPlanner#readme",
   "devDependencies": {
-    "@playwright/test": "^1.56.0",
+    "@playwright/test": "^1.56.1",
     "@types/node": "^24.7.2"
   },
   "dependencies": {
