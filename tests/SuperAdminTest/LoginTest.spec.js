@@ -14,7 +14,7 @@ test.describe('TS01 - Login', async () => {
     test('TC002 - Login with Invalid UserName', async ({page}) => {
         const loginpage = new LoginPage(page);
         await loginpage.LaunchUrl('https://dev-v2.yaantrac.com/');
-        await loginpage.enterTheCredentials('rajan' , 'Atcoperator@123');
+        await loginpage.enterTheCredentials('raja' , 'Atcoperator@123');
         await loginpage.validationMessage('Invalid Username or Password');
     })
 

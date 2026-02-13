@@ -4,7 +4,7 @@ class SummaryPage {
         this.page = page;
 
         //Dashboard
-        this.BookingsModule = page.locator("//span[@aria-label='Bookings']");
+        this.BookingsIcon = page.locator("//span[@aria-label='Bookings']");
         this.Summarytab = page.locator("//a[text()='Summary']");
         this.calendericon_start = page.locator("(//*[@data-testid='CalendarIcon'])[1]");
         this.selectdate = page.locator(`(//button[@aria-current='date']/following-sibling::button)[1]`);
@@ -32,10 +32,8 @@ class SummaryPage {
         this.drivernamefield = page.locator("#driver-name");
         //Contact Number
         this.contactnofield = page.locator("//input[@placeholder='Contact Number']");
-
-        this.addvehiclebtn = page.locator("//button[text()='Add Vehicle']")
-        this.closevehicletab = page.locator("Add External Vehicle (SIC)")
-
+        this.addvehiclebtn = page.locator("//button[text()='Add Vehicle']");
+        this.closevehicletab = page.locator("Add External Vehicle (SIC)");
         this.searchbox = page.locator("//input[@placeholder='Search…']");
 
         //Guide
@@ -75,33 +73,41 @@ class SummaryPage {
         this.suggest_search=page.locator("(//input[@placeholder='Search…'])[2]");
        //Close
         this.suggest_close=page.locator("//*[@class='feedback-close-icon iconify iconify--ic']");
-
-
-
-
-
-
-
     }
 
+    async SummaryScreen(){
+        await this.BookingsIcon.click();
+    }
+
+}
+/*
     async SummaryModule(filter) {
         await this.BookingsModule.click();
+        await this.page.waitForTimeout(1000);
         await this.Summarytab.click();
+        await this.page.waitForTimeout(1000);
         await this.calendericon_start.click();
+        await this.page.waitForTimeout(1000);
         await this.selectdate.click();
+        await this.page.waitForTimeout(1000);
         await this.calendericon_end.click();
+        await this.page.waitForTimeout(1000);
         await this.selectdate.click();
+        await this.page.pause();
         await this.Filterfield.fill(filter)
         await this.page.keyboard.press('ArrowDown');
         await this.page.keyboard.press('Enter');
+        await this.page.waitForTimeout(3000);
     }
 
     async clearfilter() {
         await this.clearfilterbtn.click();
+        await this.page.waitForTimeout(2000);
     }
 
     async Applyfilter() {
         await this.filterbtn.click();
+        await this.page.waitForTimeout(5000);
     }
     async ScheduleModule(Schedulebtn) {
         await this.page.locator(`//div[text()='${Schedulebtn}']`).click();
@@ -190,6 +196,8 @@ class SummaryPage {
         await this.suggest_close.click();
     }
     
-}
+} 
+
+*/
 
 module.exports = { SummaryPage };

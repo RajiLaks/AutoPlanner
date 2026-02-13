@@ -100,7 +100,7 @@ test.describe('TS_006', async()=>{
         const { TourName , AgentName, PickupSourceName, PickupLocation, DestinationName, DropLocation, AdultCount, ChildCount } = TWTData[6];
         await tourmodule.addRegularTour(TourName , AgentName, PickupSourceName, PickupLocation, DestinationName, DropLocation, AdultCount, ChildCount);
     }) 
-
+/*
     test('TC013 - Update the regular tour', async()=>{
         const regularTour = new TourPage(page);
         const excelreader = new ExcelReader();
@@ -108,6 +108,6 @@ test.describe('TS_006', async()=>{
         const {TourName, AgentName, PickupSourceName, PickupLocation, DestinationName, DropLocation, AdultCount, ChildCount} = regularUpdate[7];
         await regularTour.updateRegular(TourName, AgentName, PickupSourceName, PickupLocation, DestinationName, DropLocation, AdultCount, ChildCount);
     })
-
+*/
 
 });

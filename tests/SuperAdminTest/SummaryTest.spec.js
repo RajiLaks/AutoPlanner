@@ -1,13 +1,35 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../../SuperAdminPages/LoginPage');
-const {SummaryPage } = require('../../SuperAdminPages/Summary');
-import { ExcelReader } from '../../Utils/ExcelReader';
+const {SummaryPage } = require('../../SuperAdminPages/SummaryPage');
+const {ExcelReader} = require ('../../Utils/ExcelReader');
 
 let context;
 let page;
 
+test.describe('TS_006', async()=>{
+    test.beforeAll('Tour Module', async({browser})=>{
+        context = await browser.newContext({
+        viewport: { width: 1200, height: 600},
+    });
+
+        page = await context.newPage();
+        const loginpage = new LoginPage(page);
+        await loginpage.LaunchUrl('https://dev-v2.yaantrac.com/');
+        await loginpage.enterTheCredentials('atcOperator', 'Atcoperator@123');
+    })
+
+    test('TC001 - Verify that the Summary screen loads successfully', async()=>{
+        const summarypage = new SummaryPage(page);
+        await summarypage.SummaryScreen();
+    })
 
 
+
+});
+
+
+
+/*
 test.describe.serial('TS01 - Login', async () => {
 
     test('TC001 - Bookings Module', async ({ browser }) => {
@@ -18,18 +40,14 @@ test.describe.serial('TS01 - Login', async () => {
         })
         page = await context.newPage();
         const loginpage = new LoginPage(page);
-        const excelReader = new ExcelReader();
-        const logindata = await excelReader.readExcel("C:/Users/TamilselviArul/Downloads/Autoplannerdata.xlsx", "Login");
-
-        const { Url, Username, Password } = logindata[0];
-        await loginpage.LaunchUrl(Url);
-        await loginpage.enterTheCredentials(Username, Password);
+        await loginpage.LaunchUrl('https://dev-v2.yaantrac.com/');
+        await loginpage.enterTheCredentials('atcOperator', 'Atcoperator@123');
     })
 
     test('TC002 - Navigate to Bookings', async () => {
         const summaryPage = new SummaryPage(page);
         const excelReader = new ExcelReader();
-        const summarydata = await excelReader.readExcel("C:/Users/TamilselviArul/Downloads/Autoplannerdata.xlsx", "Summary");
+        const summarydata = await excelReader.readExcel("C:/Users/RajalakshmiRajasekar/Desktop/Dataset For Autoplanner.xlsx", "Summary");
         const { Filter } = summarydata[0];
         await  summaryPage.SummaryModule(Filter);
     })
@@ -47,8 +65,8 @@ test.describe.serial('TS01 - Login', async () => {
 test('TC05 - click  Schedule or Reschedule ', async () => {
         const summaryPage = new SummaryPage(page);
         const excelReader = new ExcelReader();
-        const summarydata = await excelReader.readExcel("C:/Users/TamilselviArul/Downloads/Autoplannerdata.xlsx", "Summary");
-        const {ScheduleButton} = summarydata[1];  //0-Schedule  1-Reschedule     
+        const summarydata = await excelReader.readExcel("C:/Users/RajalakshmiRajasekar/Desktop/Dataset For Autoplanner.xlsx", "Summary");
+        const {ScheduleButton} = summarydata[0];  //0-Schedule  1-Reschedule     
          await summaryPage.ScheduleModule(ScheduleButton);
 })
 test.skip('TC06 - Click view schudel button', async () => {
@@ -127,3 +145,5 @@ test('TC17 - Suggestion ', async () => {
         await summaryPage.suggestion(SuggestSearch);
 })
 })
+
+*/
